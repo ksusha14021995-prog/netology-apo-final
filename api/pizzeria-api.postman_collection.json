@@ -1,0 +1,291 @@
+{
+  "info": {
+    "name": "pizzeria-service API",
+    "description": "REST API сервиса пиццерий (порт 8002). Пиццерии, геопоиск ближайшей, меню (общие позиции и доступность в точке). Поля JSON — camelCase, эндпоинты — множественное число, ID в пути.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Список пиццерий (GET /pizzerias)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/pizzerias",
+          "host": ["{{baseUrl}}"],
+          "path": ["pizzerias"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Статус 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "2. Одна пиццерия (GET /pizzerias/{pizzeriaId})",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/pizzerias/{{pizzeriaId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["pizzerias", "{{pizzeriaId}}"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Статус 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "3. Ближайшая пиццерия (GET /pizzerias/nearest?lat=&lon=)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/pizzerias/nearest?lat=55.751244&lon=37.618423",
+          "host": ["{{baseUrl}}"],
+          "path": ["pizzerias", "nearest"],
+          "query": [
+            { "key": "lat", "value": "55.751244" },
+            { "key": "lon", "value": "37.618423" }
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Статус 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "4. Список позиций меню (GET /menuItems)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/menuItems",
+          "host": ["{{baseUrl}}"],
+          "path": ["menuItems"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Статус 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "5. Создать позицию меню (POST /menuItems)",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"isActive\": true,\n  \"price\": 599.00,\n  \"name\": \"Маргарита\",\n  \"description\": \"Томаты, моцарелла, базилик\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/menuItems",
+          "host": ["{{baseUrl}}"],
+          "path": ["menuItems"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Статус 201 Created', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "pm.test('Ответ содержит id', function () {",
+              "    var json = pm.response.json();",
+              "    pm.expect(json).to.have.property('id');",
+              "    pm.collectionVariables.set('menuItemId', json.id);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "6. Одна позиция меню (GET /menuItems/{menuItemId})",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/menuItems/{{menuItemId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["menuItems", "{{menuItemId}}"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Статус 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "7. Заменить позицию меню (PUT /menuItems/{menuItemId})",
+      "request": {
+        "method": "PUT",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"isActive\": true,\n  \"price\": 649.00,\n  \"name\": \"Маргарита\",\n  \"description\": \"Томаты, моцарелла, свежий базилик\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/menuItems/{{menuItemId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["menuItems", "{{menuItemId}}"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Статус 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "8. Изменить доступность/цену позиции (PATCH /menuItems/{menuItemId})",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"isActive\": false\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/menuItems/{{menuItemId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["menuItems", "{{menuItemId}}"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Статус 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "9. Удалить позицию меню (DELETE /menuItems/{menuItemId})",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/menuItems/{{menuItemId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["menuItems", "{{menuItemId}}"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Статус 204 No Content', function () {",
+              "    pm.response.to.have.status(204);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "10. Меню точки с доступностью (GET /pizzerias/{pizzeriaId}/menuItems)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/pizzerias/{{pizzeriaId}}/menuItems",
+          "host": ["{{baseUrl}}"],
+          "path": ["pizzerias", "{{pizzeriaId}}", "menuItems"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Статус 200 OK', function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8002" },
+    { "key": "pizzeriaId", "value": "1" },
+    { "key": "menuItemId", "value": "1" }
+  ]
+}
