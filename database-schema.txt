@@ -1,0 +1,195 @@
+ï»¿Ð¡Ð¢Ð Ð£ÐÐ¢Ð£Ð Ð ÐÐÐ ÐÐÐÐÐ«Ð¥ â backend ÑÐµÑÐ¸ Ð¿Ð¸ÑÑÐµÑÐ¸Ð¹
+ÐÑÐ¾Ð³Ð¾Ð²Ð¾Ðµ Ð·Ð°Ð´Ð°Ð½Ð¸Ðµ Ð¿Ð¾ Ð´Ð¸ÑÑÐ¸Ð¿Ð»Ð¸Ð½Ðµ Â«ÐÑÑÐ¸ÑÐµÐºÑÑÑÐ° ÐÐÂ» (ÐÐµÑÐ¾Ð»Ð¾Ð³Ð¸Ñ, BHEMBD-25-APO-2)
+ÐÐ¸ÐºÑÐ¾ÑÐµÑÐ²Ð¸ÑÐ½Ð°Ñ Ð°ÑÑÐ¸ÑÐµÐºÑÑÑÐ°: 5 ÑÐµÑÐ²Ð¸ÑÐ¾Ð², Ñ ÐºÐ°Ð¶Ð´Ð¾Ð³Ð¾ ÑÐ²Ð¾Ñ Ð½ÐµÐ·Ð°Ð²Ð¸ÑÐ¸Ð¼Ð°Ñ ÐÐ.
+
+
+====================================================================
+1. user-service  (ÐÐ: user_db)
+====================================================================
+
+
+Ð¢Ð°Ð±Ð»Ð¸ÑÐ°: roles
+  id    BIGINT        PK, auto-increment
+  code  VARCHAR(20)   UNIQUE, NOT NULL â CUSTOMER / COOK / COURIER
+  name  VARCHAR(50)   NOT NULL
+
+
+Ð¢Ð°Ð±Ð»Ð¸ÑÐ°: users
+  id             BIGINT        PK, auto-increment
+  role_id        BIGINT        FK â roles.id, NOT NULL
+  is_active      BOOLEAN       NOT NULL, DEFAULT TRUE
+  phone          VARCHAR(20)   UNIQUE, NOT NULL
+  email          VARCHAR(255)  UNIQUE
+  password_hash  VARCHAR(255)  NOT NULL
+  created_at     TIMESTAMP     NOT NULL, DEFAULT CURRENT_TIMESTAMP
+
+
+Ð¢Ð°Ð±Ð»Ð¸ÑÐ°: user_profiles
+  id           BIGINT        PK, auto-increment
+  user_id      BIGINT        FK â users.id, NOT NULL, UNIQUE
+  first_name   VARCHAR(100)  NOT NULL
+  last_name    VARCHAR(100)  NOT NULL
+  middle_name  VARCHAR(100)  NULL
+  updated_at   TIMESTAMP     DEFAULT CURRENT_TIMESTAMP
+
+
+Ð¢Ð°Ð±Ð»Ð¸ÑÐ°: user_addresses
+ÐÐ´ÑÐµÑ ÑÐ¾ÑÑÐ°Ð½ÑÐµÑÑÑ Ð² ÑÐ¾ÑÐ¼Ð°ÑÐµ Ð³ÐµÐ¾-Ð¿ÑÐ¾Ð²Ð°Ð¹Ð´ÐµÑÐ° (Ð¸Ð½ÑÐµÐ³ÑÐ°ÑÐ¸Ñ: ÑÐµÑÐ²Ð¸Ñ Ð¾ÑÐ´Ð°ÑÑ Ð³Ð¾ÑÐ¾Ð²ÑÐ¹
+Ð°Ð´ÑÐµÑ, ÐºÐ¾Ð¾ÑÐ´Ð¸Ð½Ð°ÑÑ Ð¸ Ð¸Ð´ÐµÐ½ÑÐ¸ÑÐ¸ÐºÐ°ÑÐ¾Ñ Ð¼ÐµÑÑÐ°).
+  id                 BIGINT        PK, auto-increment
+  user_id            BIGINT        FK â users.id, NOT NULL
+  is_default         BOOLEAN       NOT NULL, DEFAULT FALSE
+  latitude           DOUBLE        NOT NULL â ÑÐ¸ÑÐ¾ÑÐ° (Ð¾Ñ Ð³ÐµÐ¾-Ð¿ÑÐ¾Ð²Ð°Ð¹Ð´ÐµÑÐ°)
+  longitude          DOUBLE        NOT NULL â Ð´Ð¾Ð»Ð³Ð¾ÑÐ° (Ð¾Ñ Ð³ÐµÐ¾-Ð¿ÑÐ¾Ð²Ð°Ð¹Ð´ÐµÑÐ°)
+  provider_place_id  VARCHAR(255)  NOT NULL â Ð¸Ð´ÐµÐ½ÑÐ¸ÑÐ¸ÐºÐ°ÑÐ¾Ñ Ð¼ÐµÑÑÐ° Ñ Ð³ÐµÐ¾-Ð¿ÑÐ¾Ð²Ð°Ð¹Ð´ÐµÑÐ°
+  formatted_address  VARCHAR(500)  NOT NULL â Ð³Ð¾ÑÐ¾Ð²Ð°Ñ ÑÑÑÐ¾ÐºÐ° Ð°Ð´ÑÐµÑÐ° Ð¾Ñ Ð³ÐµÐ¾-Ð¿ÑÐ¾Ð²Ð°Ð¹Ð´ÐµÑÐ°
+  flat               VARCHAR(20)   NULL â ÐºÐ²Ð°ÑÑÐ¸ÑÐ°
+  comment            VARCHAR(255)  NULL â ÐºÐ¾Ð¼Ð¼ÐµÐ½ÑÐ°ÑÐ¸Ð¹ ÐºÑÑÑÐµÑÑ
+
+
+====================================================================
+2. pizzeria-service  (ÐÐ: pizzeria_db)
+====================================================================
+
+
+Ð¢Ð°Ð±Ð»Ð¸ÑÐ°: pizzerias
+  id         BIGINT        PK, auto-increment
+  is_active  BOOLEAN       NOT NULL, DEFAULT TRUE
+  latitude   DOUBLE        NOT NULL
+  longitude  DOUBLE        NOT NULL
+  name       VARCHAR(150)  NOT NULL
+  address    VARCHAR(255)  NOT NULL
+
+
+Ð¢Ð°Ð±Ð»Ð¸ÑÐ°: menu_items
+  id           BIGINT         PK, auto-increment
+  is_active    BOOLEAN        NOT NULL, DEFAULT TRUE
+  price        DECIMAL(10,2)  NOT NULL
+  name         VARCHAR(150)   NOT NULL
+  description  TEXT           NULL
+
+
+Ð¢Ð°Ð±Ð»Ð¸ÑÐ°: pizzeria_menu_items
+  id              BIGINT         PK, auto-increment
+  pizzeria_id     BIGINT         FK â pizzerias.id, NOT NULL
+  menu_item_id    BIGINT         FK â menu_items.id, NOT NULL
+  is_available    BOOLEAN        NOT NULL, DEFAULT TRUE
+  price_override  DECIMAL(10,2)  NULL
+  UNIQUE (pizzeria_id, menu_item_id)
+
+
+====================================================================
+3. order-service  (ÐÐ: order_db)
+====================================================================
+
+
+Ð¢Ð°Ð±Ð»Ð¸ÑÐ°: delivery_priorities
+  id    BIGINT         PK, auto-increment
+  code  VARCHAR(20)    UNIQUE, NOT NULL â NORMAL, HIGH
+  name  VARCHAR(80)    NOT NULL â Ð¾ÑÐ¾Ð±ÑÐ°Ð¶Ð°ÐµÐ¼Ð¾Ðµ Ð½Ð°Ð·Ð²Ð°Ð½Ð¸Ðµ Ð¿ÑÐ¸Ð¾ÑÐ¸ÑÐµÑÐ°
+  fee   DECIMAL(10,2)  NOT NULL, DEFAULT 0.00 â Ð´Ð¾Ð¿Ð»Ð°ÑÐ° Ð·Ð° Ð¿ÑÐ¸Ð¾ÑÐ¸ÑÐµÑ
+
+
+Ð¢Ð°Ð±Ð»Ð¸ÑÐ°: order_statuses
+  id    BIGINT       PK, auto-increment
+  code  VARCHAR(30)  UNIQUE, NOT NULL â CREATED, ACCEPTED, COOKING, READY,
+                     WAITING_COURIER, IN_DELIVERY, DELIVERED, CANCELLED
+  name  VARCHAR(80)  NOT NULL
+
+
+Ð¢Ð°Ð±Ð»Ð¸ÑÐ°: orders
+  id                    BIGINT         PK, auto-increment
+  status_id             BIGINT         FK â order_statuses.id, NOT NULL
+  priority_id           BIGINT         FK â delivery_priorities.id, NOT NULL
+  customer_id           BIGINT         NOT NULL â Ð²Ð½ÐµÑÐ½ÑÑ ÑÑÑÐ»ÐºÐ° Ð¿Ð¾ ID Ð½Ð° user-service.users
+  pizzeria_id           BIGINT         NOT NULL â Ð²Ð½ÐµÑÐ½ÑÑ ÑÑÑÐ»ÐºÐ° Ð¿Ð¾ ID Ð½Ð° pizzeria-service.pizzerias
+  address_id            BIGINT         NOT NULL â Ð²Ð½ÐµÑÐ½ÑÑ ÑÑÑÐ»ÐºÐ° Ð¿Ð¾ ID Ð½Ð° user-service.user_addresses
+  courier_id            BIGINT         NULL â Ð²Ð½ÐµÑÐ½ÑÑ ÑÑÑÐ»ÐºÐ° Ð¿Ð¾ ID Ð½Ð° user-service.users
+  priority_fee          DECIMAL(10,2)  NOT NULL, DEFAULT 0.00 â Ð´Ð¾Ð¿Ð»Ð°ÑÐ° Ð·Ð° Ð¿ÑÐ¸Ð¾ÑÐ¸ÑÐµÑ Ð½Ð° Ð¼Ð¾Ð¼ÐµÐ½Ñ Ð·Ð°ÐºÐ°Ð·Ð°
+  total_price           DECIMAL(10,2)  NOT NULL
+  expected_delivery_at  TIMESTAMP      NULL â Ð¾Ð¶Ð¸Ð´Ð°ÐµÐ¼Ð¾Ðµ Ð²ÑÐµÐ¼Ñ Ð´Ð¾ÑÑÐ°Ð²ÐºÐ¸ (Ð²ÑÐ±Ð¾Ñ ÐºÐ»Ð¸ÐµÐ½ÑÐ° Â«ÐºÐ¾ Ð²ÑÐµÐ¼ÐµÐ½Ð¸Â» Ð¸Ð»Ð¸ ÑÐ°ÑÑÑÑÐ½Ð¾Ðµ)
+  actual_delivery_at    TIMESTAMP      NULL â ÑÐ°ÐºÑÐ¸ÑÐµÑÐºÐ¾Ðµ Ð²ÑÐµÐ¼Ñ Ð´Ð¾ÑÑÐ°Ð²ÐºÐ¸ (Ð·Ð°Ð¿Ð¾Ð»Ð½ÑÐµÑÑÑ, ÐºÐ¾Ð³Ð´Ð° ÐºÑÑÑÐµÑ Ð´Ð¾ÑÑÐ°Ð²Ð¸Ð»)
+  created_at            TIMESTAMP      NOT NULL, DEFAULT CURRENT_TIMESTAMP
+  updated_at            TIMESTAMP      DEFAULT CURRENT_TIMESTAMP
+
+
+Ð¢Ð°Ð±Ð»Ð¸ÑÐ°: order_items
+  id            BIGINT         PK, auto-increment
+  order_id      BIGINT         FK â orders.id, NOT NULL
+  menu_item_id  BIGINT         NOT NULL â Ð²Ð½ÐµÑÐ½ÑÑ ÑÑÑÐ»ÐºÐ° Ð¿Ð¾ ID Ð½Ð° pizzeria-service.menu_items
+  quantity      INT            NOT NULL, DEFAULT 1
+  price         DECIMAL(10,2)  NOT NULL â ÑÐµÐ½Ð° Ð¿Ð¾Ð·Ð¸ÑÐ¸Ð¸ Ð½Ð° Ð¼Ð¾Ð¼ÐµÐ½Ñ Ð·Ð°ÐºÐ°Ð·Ð°
+  item_name     VARCHAR(150)   NOT NULL â Ð½Ð°Ð·Ð²Ð°Ð½Ð¸Ðµ Ð¿Ð¾Ð·Ð¸ÑÐ¸Ð¸ Ð½Ð° Ð¼Ð¾Ð¼ÐµÐ½Ñ Ð·Ð°ÐºÐ°Ð·Ð°
+
+
+Ð¢Ð°Ð±Ð»Ð¸ÑÐ°: order_status_history
+  id          BIGINT     PK, auto-increment
+  order_id    BIGINT     FK â orders.id, NOT NULL
+  status_id   BIGINT     FK â order_statuses.id, NOT NULL
+  changed_by  BIGINT     NULL â Ð²Ð½ÐµÑÐ½ÑÑ ÑÑÑÐ»ÐºÐ° Ð¿Ð¾ ID Ð½Ð° user-service.users
+  changed_at  TIMESTAMP  NOT NULL, DEFAULT CURRENT_TIMESTAMP
+
+
+====================================================================
+4. support-service  (ÐÐ: support_db)
+====================================================================
+
+
+Ð¢Ð°Ð±Ð»Ð¸ÑÐ°: ticket_statuses
+  id    BIGINT       PK, auto-increment
+  code  VARCHAR(20)  UNIQUE, NOT NULL â OPEN, IN_PROGRESS, RESOLVED, CLOSED
+  name  VARCHAR(50)  NOT NULL
+
+
+Ð¢Ð°Ð±Ð»Ð¸ÑÐ°: tickets
+  id           BIGINT        PK, auto-increment
+  status_id    BIGINT        FK â ticket_statuses.id, NOT NULL
+  order_id     BIGINT        NULL â Ð²Ð½ÐµÑÐ½ÑÑ ÑÑÑÐ»ÐºÐ° Ð¿Ð¾ ID Ð½Ð° order-service.orders
+  author_id    BIGINT        NOT NULL â Ð²Ð½ÐµÑÐ½ÑÑ ÑÑÑÐ»ÐºÐ° Ð¿Ð¾ ID Ð½Ð° user-service.users
+  subject      VARCHAR(255)  NOT NULL
+  description  TEXT          NOT NULL
+  created_at   TIMESTAMP     NOT NULL, DEFAULT CURRENT_TIMESTAMP
+  updated_at   TIMESTAMP     DEFAULT CURRENT_TIMESTAMP
+
+
+Ð¢Ð°Ð±Ð»Ð¸ÑÐ°: ticket_messages
+  id          BIGINT     PK, auto-increment
+  ticket_id   BIGINT     FK â tickets.id, NOT NULL
+  author_id   BIGINT     NOT NULL â Ð²Ð½ÐµÑÐ½ÑÑ ÑÑÑÐ»ÐºÐ° Ð¿Ð¾ ID Ð½Ð° user-service.users
+  body        TEXT       NOT NULL
+  created_at  TIMESTAMP  NOT NULL, DEFAULT CURRENT_TIMESTAMP
+
+
+====================================================================
+5. notification-service  (ÐÐ: notification_db)
+====================================================================
+
+
+Ð¢Ð°Ð±Ð»Ð¸ÑÐ°: notification_types
+  id    BIGINT        PK, auto-increment
+  code  VARCHAR(40)   UNIQUE, NOT NULL â ORDER_STATUS_CHANGED, TICKET_REPLIED,
+                      TICKET_STATUS_CHANGED
+  name  VARCHAR(100)  NOT NULL
+
+
+Ð¢Ð°Ð±Ð»Ð¸ÑÐ°: device_tokens
+  id          BIGINT        PK, auto-increment
+  user_id     BIGINT        NOT NULL â Ð²Ð½ÐµÑÐ½ÑÑ ÑÑÑÐ»ÐºÐ° Ð¿Ð¾ ID Ð½Ð° user-service.users
+  is_active   BOOLEAN       NOT NULL, DEFAULT TRUE
+  platform    VARCHAR(20)   NOT NULL â IOS / ANDROID / WEB
+  token       VARCHAR(512)  UNIQUE, NOT NULL
+  created_at  TIMESTAMP     NOT NULL, DEFAULT CURRENT_TIMESTAMP
+
+
+Ð¢Ð°Ð±Ð»Ð¸ÑÐ°: notifications
+  id          BIGINT        PK, auto-increment
+  type_id     BIGINT        FK â notification_types.id, NOT NULL
+  user_id     BIGINT        NOT NULL â Ð²Ð½ÐµÑÐ½ÑÑ ÑÑÑÐ»ÐºÐ° Ð¿Ð¾ ID Ð½Ð° user-service.users
+  order_id    BIGINT        NULL â Ð²Ð½ÐµÑÐ½ÑÑ ÑÑÑÐ»ÐºÐ° Ð¿Ð¾ ID Ð½Ð° order-service.orders
+  ticket_id   BIGINT        NULL â Ð²Ð½ÐµÑÐ½ÑÑ ÑÑÑÐ»ÐºÐ° Ð¿Ð¾ ID Ð½Ð° support-service.tickets
+  is_sent     BOOLEAN       NOT NULL, DEFAULT FALSE
+  is_read     BOOLEAN       NOT NULL, DEFAULT FALSE
+  title       VARCHAR(150)  NOT NULL
+  body        TEXT          NOT NULL
+  created_at  TIMESTAMP     NOT NULL, DEFAULT CURRENT_TIMESTAMP
+  sent_at     TIMESTAMP     NULL
